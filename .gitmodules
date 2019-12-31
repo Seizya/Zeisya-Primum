@@ -1,0 +1,3 @@
+[submodule "Seifuncs"]
+	path = Seifuncs
+	url = https://github.com/Seizya/Seifuncs.git
