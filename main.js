@@ -106,7 +106,7 @@ function learning(gene) {
     let count = 0;
     let limit = 0;
     let facing = 0;
-    
+
     function lintfar() {
         if (zeinote.get("Character").angle == (90 || 270)) {
             return Math.abs(zeinote.get("Character").x - zeinote.get("Boss").x);
@@ -114,7 +114,7 @@ function learning(gene) {
             return Math.abs(Math.sin(deg2rad(zeinote.get("Character").angle)) / Math.cos(deg2rad(zeinote.get("Character").angle)) * (zeinote.get("Boss").x - zeinote.get("Character").x) - (zeinote.get("Boss").y - zeinote.get("Character").y)) / Math.sqrt(Math.pow(Math.sin(deg2rad(zeinote.get("Character").angle)) / Math.cos(deg2rad(zeinote.get("Character").angle)), 2) + Math.pow(-1, 2));
         }
     }
-    
+
     do {
         zeinote.get("Boss").cset("angle", (() => {
             if (!RandFn(zeinote.get("Boss").y, 0, GetStyle(window).compute("height")[0] * .8) && count % zeinote.get("Boss").interval == 0) return Random(0, 360);
@@ -124,15 +124,14 @@ function learning(gene) {
             if (zeinote.get("Boss").y >= GetStyle(window).compute("height")[0] * 0.8) return Random(0, 180);
             return zeinote.get("Boss").angle;
         })());
-        
+
         zeinote.get("Boss").x += Math.cos(zeinote.get("Boss").angle * Math.PI / 180) * zeinote.get("Boss").speed * config.burstper;
         zeinote.get("Boss").y -= Math.sin(zeinote.get("Boss").angle * Math.PI / 180) * zeinote.get("Boss").speed * config.burstper;
-        
-        // let _T0 = Born(gene)(zeinote.get("Character").angle, two2one(rad2deg(Math.atan2((zeinote.get("Character").y - zeinote.get("Boss").y), (zeinote.get("Boss").x - zeinote.get("Character").x)))));
+
         let _T0 = Born(gene)(twodis(one2two(zeinote.get("Character").angle), rad2deg(-1 * Math.atan2((zeinote.get("Character").y - zeinote.get("Boss").y), (zeinote.get("Boss").x - zeinote.get("Character").x)))));
         zeinote.get("Character").angle += Math.abs(_T0) >= zeinote.get("Character").rotateSpeed ? zeinote.get("Character").rotateSpeed * (_T0 >= 0 ? 1 : -1) : _T0;
         zeinote.get("Character").cset("angle", Math.round(onematch(zeinote.get("Character").angle) * Math.pow(10, 5)) / Math.pow(10, 5));
-        
+
         // payment -=  Math.abs(_T0) >= zeinote.get("Character").rotateSpeed ? zeinote.get("Character").rotateSpeed : Math.abs(_T0);
         // payment -= deg2rad(Math.abs(twodis(one2two(zeinote.get("Character").angle), rad2deg(Math.atan2((zeinote.get("Character").y - zeinote.get("Boss").y), (zeinote.get("Boss").x - zeinote.get("Character").x))))))
 
@@ -145,8 +144,8 @@ function learning(gene) {
             payment += facing;
         } else {
             facing = 0;
-            // payment -= deg2rad(Math.abs(twodis(one2two(zeinote.get("Character").angle), rad2deg(-1 * Math.atan2((zeinote.get("Character").y - zeinote.get("Boss").y), (zeinote.get("Boss").x - zeinote.get("Character").x))))))
-            payment -= config.misspay;
+            // payment -= deg2rad(Math.abs(twodis(one2two(zeinote.get("Character").angle), rad2deg(-1 * Math.atan2((zeinote.get("Character").y - zeinote.get("Boss").y), (zeinote.get("Boss").x - zeinote.get("Character").x))))));
+            // payment -= config.misspay;
         }
         // console.clear();
     } while (limit < 1000);
@@ -210,6 +209,14 @@ function draw() {
     ctx.closePath();
     ctx.fillStyle = "red";
     ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(zeinote.get("Character").x, zeinote.get("Character").y)
+    ctx.lineTo(Math.sqrt(Math.pow(Canvas.width, 2) + Math.pow(Canvas.height, 2)) * Math.cos(deg2rad(zeinote.get("Character").angle)) + zeinote.get("Character").x, Math.sqrt(Math.pow(Canvas.width, 2) + Math.pow(Canvas.height, 2)) * Math.sin(deg2rad(zeinote.get("Character").angle)) + zeinote.get("Character").y)
+    ctx.closePath();
+    ctx.strokeStyle = "gray";
+    ctx.lineWidth = 1;
+    ctx.stroke();
 
     ctx.save();
     ctx.translate(zeinote.get("Character").x, zeinote.get("Character").y);
